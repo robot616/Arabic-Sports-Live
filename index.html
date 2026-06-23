@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>StarzPlay - Live Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" href="https://starzplay.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://starzplay.com/favicon.ico">
+    
+    <style>
+        /* إخفاء شريط التمرير السفلي تماماً وضبط الأبعاد */
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #000; 
+            overflow: hidden; 
+        }
+        #player { 
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            top: 0; 
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* --------------------------------------------------- */
+        /* التعديلات البصرية الجديدة لأيقونات المشغل (التصميم الاحترافي) */
+        /* --------------------------------------------------- */
+        
+        /* إخفاء أيقونة الشاشة الكاملة القديمة الافتراضية */
+        .jw-icon-fullscreen svg {
+            display: none !important;
+        }
+
+        /* وضع أيقونة الشاشة الكاملة الجديدة (أربع زوايا للخارج) باللون الأبيض */
+        .jw-icon-fullscreen {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzSDVhMiAyIDAgMCAwLTIgMnYzbTE4IDBWNWEyIDIgMCAwIDAtMi0yaC0zbTAgMThoM2EyIDIgMCAwIDAgMi0ydi0zTTMgMTZ2M2EyIDIgMCAwIDAgMiAyaDMiLz48L3N2Zz4=');
+            background-size: 55%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* وضع أيقونة الخروج من الشاشة الكاملة (أربع زوايا للداخل) عند التكبير */
+        .jw-flag-fullscreen .jw-icon-fullscreen {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzdjNhMiAyIDAgMCAxLTIgMkgzbTE4IDBoLTNhMiAyIDAgMCAxLTUtMlYzbTAgMTh2LTNhMiAyIDAgMCAxIDItMmgzTTMgMTZoM2EyIDIgMCAwIDEgMiAydjMiLz48L3N2Zz4=');
+        }
+    </style>
+    
+    <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <script>
+        const playerInstance = jwplayer("player").setup({
+            // مسارات البث والمفاتيح الأصلية بدون أي تغيير
+            "file": "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd",
+            "type": "dash",
+            "width": "100%",
+            "height": "100%",
+            "autostart": true,
+            "stretching": "uniform", 
+            "drm": {
+                "clearkey": {
+                    "keyId": "b253c726c24c7c94a3ddf9b1907e2c76",
+                    "key": "097963d6ad73c3d712a104981de0ed42"
+                }
+            }
+        });
+
+        // إضافة زر التوسيع المحدث بالأيقونة الجديدة
+        playerInstance.on('ready', function() {
+            let isStretched = false;
+
+            // كود أيقونة السهم القطري المائل والمقطوع من المنتصف (لون أبيض وسميك)
+            const diagonalCutArrow = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMTBsNy03bS02IDBoNnY2bS0xMSA1bC03IDdtNiAwSDN2LTYiLz48L3N2Zz4=";
+
+            playerInstance.addButton(
+                diagonalCutArrow, // الأيقونة البيضاء الجديدة المميزة عن الفول سكرين
+                "توسيع/تضييق الصورة", 
+                function() {
+                    if (!isStretched) {
+                        // وضع exactfit لملء الشاشة بالكامل بدون قص
+                        playerInstance.setConfig({ stretching: "exactfit" }); 
+                        isStretched = true;
+                    } else {
+                        // العودة للوضع الطبيعي
+                        playerInstance.setConfig({ stretching: "uniform" });
+                        isStretched = false;
+                    }
+                },
+                "stretch-button"
+            );
+        });
+    </script>
+</body>
+</html>
