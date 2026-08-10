@@ -59,19 +59,35 @@
 
     <script>
         const playerInstance = jwplayer("player").setup({
-            // مسارات البث والمفاتيح الأصلية بدون أي تغيير
-            "file": "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd",
-            "type": "dash",
+            // تحويل المشغل ليدعم قائمة تشغيل (Playlist) ليتضمن القناتين
+            "playlist": [
+                {
+                    "title": "StarzPlay 1",
+                    "file": "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd",
+                    "type": "dash",
+                    "drm": {
+                        "clearkey": {
+                            "keyId": "b253c726c24c7c94a3ddf9b1907e2c76",
+                            "key": "097963d6ad73c3d712a104981de0ed42"
+                        }
+                    }
+                },
+                {
+                    "title": "StarzPlay 2",
+                    "file": "https://sps2.starzplayarabia.com/out/v1/15e7d1ffb99746dda03f71dbbbc3c08b/index.mpd",
+                    "type": "dash",
+                    "drm": {
+                        "clearkey": {
+                            "keyId": "ee861edcd99093153a763a94b14c2c5a",
+                            "key": "ab3991f6a7729ba1ea4bcdba0c1ae6c0"
+                        }
+                    }
+                }
+            ],
             "width": "100%",
             "height": "100%",
             "autostart": true,
-            "stretching": "uniform", 
-            "drm": {
-                "clearkey": {
-                    "keyId": "b253c726c24c7c94a3ddf9b1907e2c76",
-                    "key": "097963d6ad73c3d712a104981de0ed42"
-                }
-            }
+            "stretching": "uniform"
         });
 
         // إضافة زر التوسيع المحدث بالأيقونة الجديدة
