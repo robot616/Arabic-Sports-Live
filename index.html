@@ -29,15 +29,13 @@
         }
 
         /* --------------------------------------------------- */
-        /* التعديلات البصرية الجديدة لأيقونات المشغل (التصميم الاحترافي) */
+        /* التعديلات البصرية لأيقونات المشغل */
         /* --------------------------------------------------- */
         
         /* إخفاء أيقونة الشاشة الكاملة القديمة الافتراضية */
-        .jw-icon-fullscreen svg {
-            display: none !important;
-        }
+        .jw-icon-fullscreen svg { display: none !important; }
 
-        /* وضع أيقونة الشاشة الكاملة الجديدة (أربع زوايا للخارج) باللون الأبيض */
+        /* أيقونة الشاشة الكاملة الجديدة */
         .jw-icon-fullscreen {
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzSDVhMiAyIDAgMCAwLTIgMnYzbTE4IDBWNWEyIDIgMCAwIDAtMi0yaC0zbTAgMThoM2EyIDIgMCAwIDAgMi0ydi0zTTMgMTZ2M2EyIDIgMCAwIDAgMiAyaDMiLz48L3N2Zz4=');
             background-size: 55%;
@@ -45,9 +43,95 @@
             background-repeat: no-repeat;
         }
 
-        /* وضع أيقونة الخروج من الشاشة الكاملة (أربع زوايا للداخل) عند التكبير */
+        /* أيقونة الخروج من الشاشة الكاملة */
         .jw-flag-fullscreen .jw-icon-fullscreen {
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzdjNhMiAyIDAgMCAxLTIgMkgzbTE4IDBoLTNhMiAyIDAgMCAxLTUtMlYzbTAgMTh2LTNhMiAyIDAgMCAxIDItMmgzTTMgMTZoM2EyIDIgMCAwIDEgMiAydjMiLz48L3N2Zz4=');
+        }
+
+        /* --------------------------------------------------- */
+        /* تصميم القائمة العائمة (Overlay) للقنوات */
+        /* --------------------------------------------------- */
+        .channel-menu {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 99999;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 260px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .channel-menu.active {
+            display: flex;
+            animation: popIn 0.2s ease-out;
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        .channel-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        .channel-menu-header h3 {
+            margin: 0;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+        }
+        .close-btn {
+            cursor: pointer;
+            color: #ff4d4d;
+            font-size: 26px;
+            line-height: 1;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .close-btn:hover {
+            color: #ff1a1a;
+            transform: scale(1.1);
+        }
+        .channel-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #2b2b2b;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .channel-menu-item:hover {
+            background: #3a3a3a;
+        }
+        .channel-menu-item.active-item {
+            background: #1dcf60;
+            border-color: #1dcf60;
+            color: #000;
+        }
+        .channel-menu-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: #fff;
+            padding: 2px;
+            object-fit: contain;
         }
     </style>
     
@@ -58,8 +142,8 @@
     <div id="player"></div>
 
     <script>
+        // إعداد البلاير ليكون بنظام Playlist ويحتوي على القناتين مع الشفرات
         const playerInstance = jwplayer("player").setup({
-            // تحويل المشغل ليدعم قائمة تشغيل (Playlist) ليتضمن القناتين
             "playlist": [
                 {
                     "title": "StarzPlay 1",
@@ -90,29 +174,87 @@
             "stretching": "uniform"
         });
 
-        // إضافة زر التوسيع المحدث بالأيقونة الجديدة
-        playerInstance.on('ready', function() {
-            let isStretched = false;
+        // دوال للتحكم في القائمة العائمة
+        function toggleMenu() {
+            const menu = document.getElementById('customChannelMenu');
+            if(menu) menu.classList.toggle('active');
+        }
 
-            // كود أيقونة السهم القطري المائل والمقطوع من المنتصف (لون أبيض وسميك)
+        function changeChannel(index) {
+            // تجاهل الأمر لو اختار نفس القناة الشغالة حالياً
+            if(playerInstance.getPlaylistIndex() === index) {
+                toggleMenu();
+                return;
+            }
+            
+            // تحديث اللون الأخضر (Active) في القائمة
+            const items = document.querySelectorAll('.channel-menu-item');
+            items.forEach((el, i) => {
+                if(i === index) el.classList.add('active-item');
+                else el.classList.remove('active-item');
+            });
+
+            // الانتقال السلس للقناة الجديدة بدون عمل إيقاف أو خطأ
+            playerInstance.playlistItem(index);
+            
+            // إغلاق القائمة العائمة
+            toggleMenu();
+        }
+
+        // بناء القائمة والأزرار بمجرد تحميل المشغل
+        playerInstance.on('ready', function() {
+            // 1. زر فتح قائمة القنوات (أيقونة Menu)
+            const listIcon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNCA2aDE2TTQgMTJoMTZNNCAxOGgxNiIvPjwvc3ZnPg==";
+            
+            playerInstance.addButton(
+                listIcon,
+                "قائمة القنوات",
+                function() {
+                    toggleMenu();
+                },
+                "channels-button"
+            );
+
+            // 2. زر التوسيع الأصلي اللي طلبته
+            let isStretched = false;
             const diagonalCutArrow = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMTBsNy03bS02IDBoNnY2bS0xMSA1bC03IDdtNiAwSDN2LTYiLz48L3N2Zz4=";
 
             playerInstance.addButton(
-                diagonalCutArrow, // الأيقونة البيضاء الجديدة المميزة عن الفول سكرين
+                diagonalCutArrow, 
                 "توسيع/تضييق الصورة", 
                 function() {
                     if (!isStretched) {
-                        // وضع exactfit لملء الشاشة بالكامل بدون قص
                         playerInstance.setConfig({ stretching: "exactfit" }); 
                         isStretched = true;
                     } else {
-                        // العودة للوضع الطبيعي
                         playerInstance.setConfig({ stretching: "uniform" });
                         isStretched = false;
                     }
                 },
                 "stretch-button"
             );
+
+            // 3. حقن كود القائمة العائمة داخل واجهة البلاير عشان تظهر حتى في الشاشة الكاملة
+            const playerContainer = playerInstance.getContainer();
+            const menuHtml = `
+                <div id="customChannelMenu" class="channel-menu" dir="rtl">
+                    <div class="channel-menu-header">
+                        <h3>باقة StarzPlay</h3>
+                        <span class="close-btn" onclick="toggleMenu()">&times;</span>
+                    </div>
+                    <div class="channel-menu-item active-item" onclick="changeChannel(0)">
+                        <img src="https://starzplay.com/favicon.ico" alt="Icon">
+                        <span>StarzPlay 1</span>
+                    </div>
+                    <div class="channel-menu-item" onclick="changeChannel(1)">
+                        <img src="https://starzplay.com/favicon.ico" alt="Icon">
+                        <span>StarzPlay 2</span>
+                    </div>
+                </div>
+            `;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = menuHtml;
+            playerContainer.appendChild(tempDiv.firstElementChild);
         });
     </script>
 </body>
