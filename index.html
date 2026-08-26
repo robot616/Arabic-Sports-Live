@@ -182,6 +182,28 @@
                             "key": "3dfb883251884e66d784111877c44b13"
                         }
                     }
+                },
+                {
+                    "title": "Abu Dhabi Sports 1",
+                    "file": "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_1/abudhabi_sports_1_dash_enc/index.mpd",
+                    "type": "dash",
+                    "drm": {
+                        "clearkey": {
+                            "keyId": "e78769d87a41e15036a4fb8bfdf1371e",
+                            "key": "37be0375dc9fe544c3c6de6a105f7c0a"
+                        }
+                    }
+                },
+                {
+                    "title": "Abu Dhabi Sports 2",
+                    "file": "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_2/abudhabi_sports_2_dash_enc/index.mpd",
+                    "type": "dash",
+                    "drm": {
+                        "clearkey": {
+                            "keyId": "386a5e1166d9102709888c3468ce1f56",
+                            "key": "73bd0bd25a148b3a80116ecdd085ead6"
+                        }
+                    }
                 }
             ],
             "width": "100%",
@@ -210,7 +232,7 @@
                 else el.classList.remove('active-item');
             });
 
-            // الانتقال السلس للقناة الجديدة بدون عمل إيقاف أو خطأ
+            // الانتقال السلس للقناة الجديدة
             playerInstance.playlistItem(index);
             
             // إغلاق القائمة العائمة
@@ -252,6 +274,11 @@
 
             // 3. حقن كود القائمة العائمة داخل واجهة البلاير
             const playerContainer = playerInstance.getContainer();
+            
+            // أيقونات قنوات أبو ظبي (مبنية بـ SVG لتشبه ستايل ستارز بلاي الأسود مع ألوان حمراء)
+            const logoAds1 = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111' /%3E%3Ctext x='50' y='55' font-family='Arial, sans-serif' font-weight='900' font-size='32' fill='%23fff' text-anchor='middle' dominant-baseline='middle'%3EADS%3Ctspan fill='%23e50914'%3E1%3C/tspan%3E%3C/text%3E%3C/svg%3E";
+            const logoAds2 = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111' /%3E%3Ctext x='50' y='55' font-family='Arial, sans-serif' font-weight='900' font-size='32' fill='%23fff' text-anchor='middle' dominant-baseline='middle'%3EADS%3Ctspan fill='%23e50914'%3E2%3C/tspan%3E%3C/text%3E%3C/svg%3E";
+
             const menuHtml = `
                 <div id="customChannelMenu" class="channel-menu" dir="rtl">
                     <div class="channel-menu-header">
@@ -269,6 +296,14 @@
                     <div class="channel-menu-item" onclick="changeChannel(2)">
                         <img src="https://starzplay.com/favicon.ico" alt="Icon">
                         <span>StarzPlay 3</span>
+                    </div>
+                    <div class="channel-menu-item" onclick="changeChannel(3)">
+                        <img src="${logoAds1}" alt="Icon">
+                        <span>AD Sports 1</span>
+                    </div>
+                    <div class="channel-menu-item" onclick="changeChannel(4)">
+                        <img src="${logoAds2}" alt="Icon">
+                        <span>AD Sports 2</span>
                     </div>
                 </div>
             `;
