@@ -2,368 +2,289 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Arabic Sports Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- مكتبة JW Player -->
+    <title>Arabic Sports Live</title>
+    
+    <link rel="icon" type="image/png" sizes="512x512" href="https://img.icons8.com/fluency/512/play.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="https://img.icons8.com/fluency/512/play.png">
+    <meta name="apple-mobile-web-app-title" content="Arabic Sports Live">
+
     <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css">
+
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            background: #0f0f0f; color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            color: #fff;
         }
-
-        /* تخطيط الصفحة: المحتوى يميناً والقائمة يساراً */
-        .layout {
-            display: flex;
-            flex-direction: row; /* في نظام RTL، العنصر الأول سيكون على اليمين والثاني على اليسار */
-            height: 100vh;
-            width: 100%;
-        }
-
-        /* ------------------------------------------- */
-        /* تصميم منطقة العرض الرئيسية (اليمين) */
-        /* ------------------------------------------- */
-        .main-area {
-            flex: 1;
-            position: relative;
-            /* صورة ملعب تعبر عن الرياضة */
-            background: url('https://images.unsplash.com/photo-1518605368461-1ee7c5320d73?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .main-area::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7); /* غطاء داكن لإبراز النص */
-            z-index: 1;
-        }
-
-        .welcome-screen {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .welcome-title {
-            color: #1dcf60;
-            font-size: 75px;
-            font-weight: 900;
-            margin: 0;
-            letter-spacing: 2px;
-            text-shadow: 0 5px 25px rgba(29, 207, 96, 0.4);
-        }
-
-        .welcome-subtitle {
-            color: #ddd;
-            font-size: 20px;
-            margin-top: 15px;
-        }
-
-        #player-wrapper {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            display: none;
-            background: #000;
-        }
-
-        #player {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* ------------------------------------------- */
-        /* تصميم القائمة الجانبية (الشمال) */
-        /* ------------------------------------------- */
+        .app-container { display: flex; width: 100vw; height: 100vh; flex-direction: row; }
         .sidebar {
-            width: 320px;
-            background-color: #111;
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid #2a2a2a; /* تم التعديل لتناسب وضعها على اليسار */
-            z-index: 20;
+            width: 320px; background: #181818;
+            border-left: 1px solid #333; display: flex; flex-direction: column; z-index: 10;
         }
-
-        /* شريط البحث وزر الرئيسية */
-        .search-container {
-            display: flex;
-            flex-direction: row; /* ترتيب العناصر: البحث يميناً والهوم يساراً */
-            padding: 15px;
-            gap: 10px;
-            background-color: #161616;
-            border-bottom: 1px solid #2a2a2a;
-        }
-
-        .search-box {
-            flex: 1;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 6px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .search-box:focus {
-            border-color: #1dcf60;
-        }
-
+        
+        .search-box { padding: 15px; background: #222; border-bottom: 1px solid #333; }
+        .search-container { display: flex; gap: 10px; align-items: center; }
+        
         .home-btn {
-            background: #ff4d4d;
-            border: none;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
+            background: #111; border: 1px solid #444; border-radius: 6px; padding: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; color: #ccc; flex-shrink: 0;
         }
+        .home-btn:hover { background: #333; color: #fff; border-color: #666; }
+        .home-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
-        .home-btn:hover {
-            background: #ff1a1a;
+        .search-box input {
+            flex: 1; padding: 12px; background: #111; border: 1px solid #444;
+            color: #fff; border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none;
         }
+        .search-box input:focus { border-color: #1dcf60; }
+        .channel-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .channel-list::-webkit-scrollbar { width: 6px; }
+        .channel-list::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
 
-        .home-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-        }
-
-        /* حاوية القنوات */
-        .channels-list-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-        }
-
-        .channels-list-container::-webkit-scrollbar { width: 6px; }
-        .channels-list-container::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
+       /* تنسيق عناوين أقسام القنوات */
         .category-header {
-            background: #000;
-            border: 1px solid #333;
-            color: #1dcf60;
-            text-align: center;
-            padding: 10px;
-            margin-top: 15px;
-            margin-bottom: 10px;
+            background: #111;
+            color: #fff;
+            padding: 12px;
+            margin: 20px 0 10px 0;
             border-radius: 6px;
             font-size: 15px;
             font-weight: bold;
+            text-align: center;
+            border: 1px solid #555;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
         }
+        .category-header:first-child {
+            margin-top: 0;
+        }
+
+        .channel-btn {
+            background: #222; padding: 12px 15px; margin-bottom: 5px; border-radius: 6px;
+            cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .channel-btn:hover { background: #333; }
+        .channel-btn.active { background: #1dcf60; color: #fff; }
+        .player-wrapper { flex: 1; position: relative; background: #000; }
+        #player { position: absolute !important; top: 0; right: 0; bottom: 0; left: 0; width: 100% !important; height: 100% !important; }
         
-        .category-header:first-child { margin-top: 0; }
-
-        .channel-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background: transparent;
-            border-bottom: 1px solid #222;
-            cursor: pointer;
-            transition: all 0.2s;
+        #home-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(15, 15, 15, 0.8), rgba(15, 15, 15, 0.9)), url('https://images.unsplash.com/photo-1600181516264-3ea807fb4432?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 20; text-align: center;
+        }
+        #home-screen h1 {
+            font-size: 4rem; margin: 0; color: #1dcf60;
+            text-transform: uppercase; letter-spacing: 3px; font-weight: 900;
+            text-shadow: 0px 4px 15px rgba(29, 207, 96, 0.3);
+        }
+        #home-screen p { font-size: 1.2rem; color: #ccc; margin-top: 15px; }
+        
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .player-wrapper { height: 40vh; flex: none; }
+            .sidebar { width: 100%; height: 60vh; border-left: none; border-top: 1px solid #333; }
+            #home-screen h1 { font-size: 2.5rem; }
         }
 
-        .channel-item:hover, .channel-item.active {
-            background: #1a1a1a;
-            border-right: 3px solid #1dcf60;
+        /* إضافة أيقونة الشاشة الكاملة الاحترافية */
+        .jw-icon-fullscreen svg { display: none !important; }
+        .jw-icon-fullscreen {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTggM0g1YTIgMiAwIDAgMC0yIDJ2M20xOCAwVjVhMiAyIDAgMCAwLTItMmgtM20wIDE4aDNhMiAyIDAgMCAwIDItMnYtM00zIDE2djNhMiAyIDAgMCAwIDIgMmgzIj48L3BhdGg+PC9zdmc+');
+            background-size: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-
-        .channel-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #eee;
-        }
-
-        .channel-tag {
-            background: #222;
-            color: #888;
-            font-size: 10px;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-weight: bold;
+        /* تغيير شكل الأيقونة عند الدخول في وضع الشاشة الكاملة (العكسي) */
+        .jw-flag-fullscreen .jw-icon-fullscreen {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTggM3YzYTIgMiAwIDAgMS0yIDJIM20xOCAwaC0zYTIgMiAwIDAgMS0yLTJWM20wIDE4di0zYTIgMiAwIDAgMSAyLTJoM00zIDE2aDNhMiAyIDAgMCAxIDIgMnYzIj48L3BhdGg+PC9zdmc+');
         }
     </style>
 </head>
 <body>
 
-    <div class="layout">
-        <!-- منطقة العرض الرئيسية (اليمين) -->
-        <div class="main-area">
-            <div class="welcome-screen" id="welcome-screen">
-                <h1 class="welcome-title">Arabic Sports Live</h1>
-                <p class="welcome-subtitle">اختر قناة من القائمة الجانبية لبدء البث المباشر ⚽</p>
+    <div class="app-container">
+        <div class="player-wrapper">
+            <div id="home-screen">
+                <h1>Arabic Sports Live</h1>
+                <p>اختر قناة من القائمة لبدء البث المباشر</p>
             </div>
-            
-            <div id="player-wrapper">
-                <div id="player"></div>
-            </div>
+            <div id="player"></div>
         </div>
-
-        <!-- القائمة الجانبية (الشمال) -->
         <div class="sidebar">
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-box" placeholder="ابحث عن قناة..." onkeyup="filterChannels()">
-                <!-- زر الهوم على الشمال -->
-                <button class="home-btn" onclick="goHome()" title="الرئيسية">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                    </svg>
-                </button>
+            <div class="search-box">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="ابحث عن قناة هنا..." onkeyup="filterChannels()">
+                    <button class="home-btn" onclick="goHome()" title="العودة للرئيسية وإيقاف البث">
+                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    </button>
+                </div>
             </div>
-            <div class="channels-list-container" id="sidebar-list">
-                <!-- سيتم حقن القنوات هنا -->
-            </div>
+            <div class="channel-list" id="channelList"></div>
         </div>
     </div>
 
     <script>
-        // بيانات القنوات
-        const channelGroups = [
-            {
-                groupName: "القنوات المصرية",
-                channels: [
-                    { title: "On Sport HD", type: "HLS", file: "https://fastly.live.brightcove.com/6386028928112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjg5MjgxMTIifQ.7pBZHXb93BJ47HBrEiPQvSquoHi92NStYSX3JKYcznQ/chunklist.m3u8" },
-                    { title: "On Sport Max", type: "HLS", file: "https://fastly.live.brightcove.com/6386027187112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjcxODcxMTIifQ.o9bQYbACQ386kDSKbOPBVYlIhCz3WFgEHI3A8Pcw3qg/chunklist.m3u8" },
-                    { title: "On Sport Plus", type: "HLS", file: "https://fastly.live.brightcove.com/6384149663112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODQxNDk2NjMxMTIifQ.0yJpNEV0ZSId11mURgeaOhXZvov07Uj-VI_0qt0LLSQ/chunklist.m3u8" },
-                    { title: "Kora Plus 1", type: "HLS", file: "https://fastly.live.brightcove.com/6386030131112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMzAxMzExMTIifQ.aZa3dfTqySgbsPGs64c0_JTfvR1mKUmvdlDJ1WTeDgo/chunklist.m3u8" },
-                    { title: "Kora Plus 2", type: "HLS", file: "https://fastly.live.brightcove.com/6403055025112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjY0MDMwNTUwMjUxMTIifQ.Csg7lrJRiTyrEmve4yHdrm4fs715JRMK6TTz7YvCg1c/playlist-hls.m3u8" },
-                    { title: "Kora Plus 3", type: "HLS", file: "https://fastly.live.brightcove.com/6386122937112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYxMjI5MzcxMTIifQ.HPPHHVyUxLnEyCqaO6AP7j1iCOBrMGE-zTe-7mV1-24/chunklist.m3u8" }
-                ]
-            },
-            {
-                groupName: "باقة StarzPlay و Abu Dhabi",
-                channels: [
-                    { title: "StarzPlay 1", type: "DASH", file: "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd", drm: { clearkey: { keyId: "b253c726c24c7c94a3ddf9b1907e2c76", key: "097963d6ad73c3d712a104981de0ed42" } } },
-                    { title: "StarzPlay 2", type: "DASH", file: "https://sps2.starzplayarabia.com/out/v1/15e7d1ffb99746dda03f71dbbbc3c08b/index.mpd", drm: { clearkey: { keyId: "ee861edcd99093153a763a94b14c2c5a", key: "ab3991f6a7729ba1ea4bcdba0c1ae6c0" } } },
-                    { title: "StarzPlay 3", type: "DASH", file: "https://sps3.starzplayarabia.com/out/v1/95528122fa434bcd948c9ed2e7afabee/index.mpd", drm: { clearkey: { keyId: "117c29396ec6fd295880013241a466e1", key: "3dfb883251884e66d784111877c44b13" } } },
-                    { title: "AD Sports 1", type: "DASH", file: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_1/abudhabi_sports_1_dash_enc/index.mpd", drm: { clearkey: { keyId: "e78769d87a41e15036a4fb8bfdf1371e", key: "37be0375dc9fe544c3c6de6a105f7c0a" } } },
-                    { title: "AD Sports 2", type: "DASH", file: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_2/abudhabi_sports_2_dash_enc/index.mpd", drm: { clearkey: { keyId: "386a5e1166d9102709888c3468ce1f56", key: "73bd0bd25a148b3a80116ecdd085ead6" } } }
-                ]
-            },
-            {
-                groupName: "قنوات الكأس الرياضية",
-                channels: [
-                    { title: "Alkass 1", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass1-p/main.m3u8" },
-                    { title: "Alkass 2", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass2-p/main.m3u8" },
-                    { title: "Alkass 3", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass3-p/main.m3u8" },
-                    { title: "Alkass 4", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass4-p/main.m3u8" },
-                    { title: "Alkass 5", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass5-p/main.m3u8" },
-                    { title: "Alkass 6", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass6-p/main.m3u8" },
-                    { title: "Alkass 7", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass7-p/main.m3u8" },
-                    { title: "Alkass 8", type: "HLS", file: "https://storage.googleapis.com/livealkass-eu/alkass8-p/main.m3u8" }
-                ]
-            }
+        var channels = [
+            // ==========================================
+            // القنوات المصرية
+            // ==========================================
+            { header: "القنوات المصرية" },
+            { name: "On Sport HD", url: "https://fastly.live.brightcove.com/6386028928112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjg5MjgxMTIifQ.7pBZHXb93BJ47HBrEiPQvSquoHi92NStYSX3JKYcznQ/chunklist.m3u8" },
+            { name: "On Sport Max", url: "https://fastly.live.brightcove.com/6386027187112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjcxODcxMTIifQ.o9bQYbACQ386kDSKbOPBVYlIhCz3WFgEHI3A8Pcw3qg/chunklist.m3u8" },
+            { name: "On Sport Plus", url: "https://fastly.live.brightcove.com/6384149663112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODQxNDk2NjMxMTIifQ.0yJpNEV0ZSId11mURgeaOhXZvov07Uj-VI_0qt0LLSQ/chunklist.m3u8" },
+            { name: "Kora Plus 1", url: "https://fastly.live.brightcove.com/6386030131112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMzAxMzExMTIifQ.aZa3dfTqySgbsPGs64c0_JTfvR1mKUmvdlDJ1WTeDgo/chunklist.m3u8" },
+            { name: "Kora Plus 2", url: "https://fastly.live.brightcove.com/6403055025112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjY0MDMwNTUwMjUxMTIifQ.Csg7lrJRiTyrEmve4yHdrm4fs715JRMK6TTz7YvCg1c/playlist-hls.m3u8" },
+            { name: "Kora Plus 3", url: "https://fastly.live.brightcove.com/6386122937112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYxMjI5MzcxMTIifQ.HPPHHVyUxLnEyCqaO6AP7j1iCOBrMGE-zTe-7mV1-24/chunklist.m3u8" },
+
+            // ==========================================
+            // باقة StarzPlay و Abu Dhabi
+            // ==========================================
+            { header: "باقة StarzPlay و Abu Dhabi" },
+            { name: "StarzPlay 1", url: "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd", k1: "b253c726c24c7c94a3ddf9b1907e2c76", k2: "097963d6ad73c3d712a104981de0ed42" },
+            { name: "StarzPlay 2", url: "https://sps2.starzplayarabia.com/out/v1/15e7d1ffb99746dda03f71dbbbc3c08b/index.mpd", k1: "ee861edcd99093153a763a94b14c2c5a", k2: "ab3991f6a7729ba1ea4bcdba0c1ae6c0" },
+            { name: "StarzPlay 3", url: "https://sps3.starzplayarabia.com/out/v1/95528122fa434bcd948c9ed2e7afabee/index.mpd", k1: "117c29396ec6fd295880013241a466e1", k2: "3dfb883251884e66d784111877c44b13" },
+            { name: "AD Sports 1", url: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_1/abudhabi_sports_1_dash_enc/index.mpd", k1: "e78769d87a41e15036a4fb8bfdf1371e", k2: "37be0375dc9fe544c3c6de6a105f7c0a" },
+            { name: "AD Sports 2", url: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_2/abudhabi_sports_2_dash_enc/index.mpd", k1: "386a5e1166d9102709888c3468ce1f56", k2: "73bd0bd25a148b3a80116ecdd085ead6" },
+
+            // ==========================================
+            // قنوات الكأس الرياضية
+            // ==========================================
+            { header: "قنوات الكأس الرياضية" },
+            { name: "Alkass 1", url: "https://storage.googleapis.com/livealkass-eu/alkass1-p/main.m3u8" },
+            { name: "Alkass 2", url: "https://storage.googleapis.com/livealkass-eu/alkass2-p/main.m3u8" },
+            { name: "Alkass 3", url: "https://storage.googleapis.com/livealkass-eu/alkass3-p/main.m3u8" },
+            { name: "Alkass 4", url: "https://storage.googleapis.com/livealkass-eu/alkass4-p/main.m3u8" },
+            { name: "Alkass 5", url: "https://storage.googleapis.com/livealkass-eu/alkass5-p/main.m3u8" },
+            { name: "Alkass 6", url: "https://storage.googleapis.com/livealkass-eu/alkass6-p/main.m3u8" },
+            { name: "Alkass 7", url: "https://storage.googleapis.com/livealkass-eu/alkass7-p/main.m3u8" },
+            { name: "Alkass 8", url: "https://storage.googleapis.com/livealkass-eu/alkass8-p/main.m3u8" },
+
+            // ==========================================
+            // قنوات SHASHA
+            // ==========================================
+            { header: "قنوات SHASHA" },
+            { name: "SHASHA 1", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_48531dd0d68011f089c69d31d64066d9/index.m3u8" },
+            { name: "SHASHA 2", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_7225dcc0d67f11f0bdcd396dadad2a69/index.m3u8" },
+            { name: "SHASHA 3", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_f9263810514911f186a0752ee758b37c/index.m3u8" },
+            { name: "SHASHA 4", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_1d3b9f50d68011f0891ac1acf28a6858/index.m3u8" },
+            { name: "SHASHA 5", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_1dc7d580558d11efa2eeebd0ba5ae7e5/index.m3u8" },
+            { name: "SHASHA 6", url: "https://213368-castr.akamaized.net/65bdf582e043b56b0868a081/live_0586efe0c2e611eeb02035c643a92b1e/index.m3u8" },
+            { name: "shasha 1 *", url: "https://254670.global.ssl.fastly.net/693a72c2102b1e0ac9bb3f14/live_d5a45b30d66311f094baa96c56867df9/index.m3u8" }
         ];
 
-        let playerInstance = null;
+        var playerInstance = null;
 
-        // دالة بناء القائمة الجانبية
-        function buildSidebar(filterText = "") {
-            const sidebarContainer = document.getElementById('sidebar-list');
-            sidebarContainer.innerHTML = "";
+        function renderChannels(filterText) {
+            if (!filterText) filterText = "";
+            var listContainer = document.getElementById("channelList");
+            listContainer.innerHTML = "";
 
-            channelGroups.forEach((group) => {
-                const filteredChannels = group.channels.filter(ch => 
-                    ch.title.toLowerCase().includes(filterText.toLowerCase())
-                );
-
-                if (filteredChannels.length > 0) {
-                    const header = document.createElement('div');
-                    header.className = 'category-header';
-                    header.innerText = group.groupName;
-                    sidebarContainer.appendChild(header);
-
-                    filteredChannels.forEach((ch) => {
-                        const channelItem = document.createElement('div');
-                        channelItem.className = 'channel-item';
-                        channelItem.onclick = () => playChannel(ch, channelItem);
-                        
-                        channelItem.innerHTML = `
-                            <span class="channel-name">${ch.title}</span>
-                            <span class="channel-tag">${ch.type}</span>
-                        `;
-                        
-                        sidebarContainer.appendChild(channelItem);
-                    });
+            for (var i = 0; i < channels.length; i++) {
+                var channel = channels[i];
+                
+                // إضافة عرض الفواصل (العناوين)
+                if (channel.header) {
+                    // إذا كان يبحث، نقوم بإخفاء العناوين لنظهر القنوات فقط
+                    if (filterText === "") {
+                        var headerDiv = document.createElement("div");
+                        headerDiv.className = "category-header";
+                        headerDiv.innerText = channel.header;
+                        listContainer.appendChild(headerDiv);
+                    }
+                    continue;
                 }
+
+                if (channel.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
+
+                    var btn = document.createElement("div");
+                    btn.className = "channel-btn";
+                    btn.id = "btn-" + i;
+                    var typeBadge = channel.url ? (channel.url.indexOf(".m3u8") !== -1 ? "HLS" : "DASH") : "";
+
+                    btn.innerHTML = '<span>' + channel.name + '</span>' +
+                                    '<span style="font-size: 10px; color: #aaa; background: #333; padding: 2px 6px; border-radius: 4px;">' + typeBadge + '</span>';
+                    
+                    (function(index) {
+                        btn.onclick = function() { playChannel(index); };
+                    })(i);
+                    listContainer.appendChild(btn);
+                }
+            }
+        }
+
+        function goHome() {
+            document.getElementById("home-screen").style.display = "flex";
+            
+            if (playerInstance) {
+                playerInstance.remove(); 
+                playerInstance = null;
+            }
+
+            var allBtns = document.querySelectorAll(".channel-btn");
+            for (var j = 0; j < allBtns.length; j++) { allBtns[j].classList.remove("active"); }
+        }
+
+        function playChannel(index) {
+            var channel = channels[index];
+            
+            document.getElementById("home-screen").style.display = "none";
+            
+            var allBtns = document.querySelectorAll(".channel-btn");
+            for (var j = 0; j < allBtns.length; j++) { allBtns[j].classList.remove("active"); }
+            var activeBtn = document.getElementById("btn-" + index);
+            if(activeBtn) activeBtn.classList.add("active");
+
+            var setupConfig = {
+                file: channel.url,
+                type: channel.url.indexOf(".m3u8") !== -1 ? "hls" : "dash",
+                width: "100%", height: "100%",
+                autostart: true, preload: "auto", stretching: "uniform"
+            };
+
+            if (channel.k1 && channel.k2) {
+                setupConfig.drm = { clearkey: { keyId: channel.k1, key: channel.k2 } };
+            }
+
+            playerInstance = jwplayer("player").setup(setupConfig);
+
+            playerInstance.on('ready', function() {
+                var isStretched = false;
+                var diagonalCutArrow = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMTBsNy03bS02IDBoNnY2bS0xMSA1bC03IDdtNiAwSDN2LTYiLz48L3N2Zz4=";
+
+                playerInstance.addButton(
+                    diagonalCutArrow, 
+                    "توسيع/تضييق الصورة", 
+                    function() {
+                        if (!isStretched) {
+                            playerInstance.setConfig({ stretching: "exactfit" }); 
+                            isStretched = true;
+                        } else {
+                            playerInstance.setConfig({ stretching: "uniform" });
+                            isStretched = false;
+                        }
+                    },
+                    "stretch-button"
+                );
             });
         }
 
-        // دالة التشغيل التي تم تعديلها لتجنب أخطاء قائمة التشغيل (Error 102630 Fix)
-        function playChannel(channelConfig, element) {
-            // إظهار المشغل وإخفاء الخلفية
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('player-wrapper').style.display = 'block';
-
-            // تفعيل اللون على القناة المختارة
-            document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-
-            // إعداد مصدر الفيديو
-            const sourceItem = {
-                file: channelConfig.file,
-                type: channelConfig.type.toLowerCase()
-            };
-            
-            // إضافة مفاتيح الـ DRM إن وجدت
-            if(channelConfig.drm) {
-                sourceItem.drm = channelConfig.drm;
-            }
-
-            // تشغيل المشغل
-            if (!playerInstance) {
-                playerInstance = jwplayer("player").setup({
-                    playlist: [sourceItem],
-                    width: "100%",
-                    height: "100%",
-                    autostart: true,
-                    stretching: "exactfit",
-                    cast: {}
-                });
-            } else {
-                playerInstance.load([sourceItem]);
-                playerInstance.play();
-            }
-        }
-
-        // العودة للرئيسية وإغلاق البث
-        function goHome() {
-            if(playerInstance) {
-                playerInstance.stop();
-            }
-            document.getElementById('player-wrapper').style.display = 'none';
-            document.getElementById('welcome-screen').style.display = 'block';
-            
-            document.getElementById('search-input').value = "";
-            buildSidebar();
-        }
-
-        // دالة البحث
         function filterChannels() {
-            const val = document.getElementById('search-input').value;
-            buildSidebar(val);
+            var text = document.getElementById("searchInput").value;
+            renderChannels(text);
         }
 
-        // البناء الأولي للقائمة
-        buildSidebar();
+        renderChannels("");
+        goHome(); 
+
     </script>
 </body>
 </html>
