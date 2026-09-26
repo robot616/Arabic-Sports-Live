@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Arabic Sports Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- مكتبة JW Player -->
     <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
     <style>
         * {
@@ -21,41 +22,112 @@
             color: #fff;
         }
 
-        /* تخطيط الصفحة: القائمة على اليسار والمحتوى على اليمين */
+        /* تخطيط الصفحة: المحتوى يميناً والقائمة يساراً */
         .layout {
             display: flex;
-            flex-direction: row-reverse; /* يجعل القائمة على اليسار في نظام RTL */
+            flex-direction: row; /* في نظام RTL، العنصر الأول سيكون على اليمين والثاني على اليسار */
             height: 100vh;
             width: 100%;
         }
 
         /* ------------------------------------------- */
-        /* تصميم القائمة الجانبية (Sidebar) */
+        /* تصميم منطقة العرض الرئيسية (اليمين) */
+        /* ------------------------------------------- */
+        .main-area {
+            flex: 1;
+            position: relative;
+            /* صورة ملعب تعبر عن الرياضة */
+            background: url('https://images.unsplash.com/photo-1518605368461-1ee7c5320d73?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7); /* غطاء داكن لإبراز النص */
+            z-index: 1;
+        }
+
+        .welcome-screen {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .welcome-title {
+            color: #1dcf60;
+            font-size: 75px;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 25px rgba(29, 207, 96, 0.4);
+        }
+
+        .welcome-subtitle {
+            color: #ddd;
+            font-size: 20px;
+            margin-top: 15px;
+        }
+
+        #player-wrapper {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: none;
+            background: #000;
+        }
+
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ------------------------------------------- */
+        /* تصميم القائمة الجانبية (الشمال) */
         /* ------------------------------------------- */
         .sidebar {
             width: 320px;
             background-color: #111;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #2a2a2a;
+            border-left: 1px solid #2a2a2a; /* تم التعديل لتناسب وضعها على اليسار */
             z-index: 20;
         }
 
         /* شريط البحث وزر الرئيسية */
         .search-container {
             display: flex;
+            flex-direction: row; /* ترتيب العناصر: البحث يميناً والهوم يساراً */
             padding: 15px;
             gap: 10px;
             background-color: #161616;
             border-bottom: 1px solid #2a2a2a;
         }
 
-        .home-btn {
+        .search-box {
+            flex: 1;
             background: #1a1a1a;
             border: 1px solid #333;
             color: #fff;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box:focus {
+            border-color: #1dcf60;
+        }
+
+        .home-btn {
+            background: #ff4d4d;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -64,29 +136,13 @@
         }
 
         .home-btn:hover {
-            background: #333;
+            background: #ff1a1a;
         }
 
         .home-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: #fff;
-        }
-
-        .search-box {
-            flex: 1;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 8px 15px;
-            border-radius: 4px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .search-box:focus {
-            border-color: #1dcf60;
-            color: #fff;
         }
 
         /* حاوية القنوات */
@@ -96,27 +152,24 @@
             padding: 15px;
         }
 
-        /* تصميم شريط التمرير */
         .channels-list-container::-webkit-scrollbar { width: 6px; }
         .channels-list-container::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        /* عنوان القسم (Category Header) */
         .category-header {
             background: #000;
             border: 1px solid #333;
-            color: #fff;
+            color: #1dcf60;
             text-align: center;
             padding: 10px;
             margin-top: 15px;
             margin-bottom: 10px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
         }
         
         .category-header:first-child { margin-top: 0; }
 
-        /* زر القناة */
         .channel-item {
             display: flex;
             justify-content: space-between;
@@ -130,6 +183,7 @@
 
         .channel-item:hover, .channel-item.active {
             background: #1a1a1a;
+            border-right: 3px solid #1dcf60;
         }
 
         .channel-name {
@@ -142,82 +196,20 @@
             background: #222;
             color: #888;
             font-size: 10px;
-            padding: 3px 6px;
+            padding: 4px 6px;
             border-radius: 4px;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
-
-        /* ------------------------------------------- */
-        /* تصميم منطقة العرض الرئيسية (Main Area) */
-        /* ------------------------------------------- */
-        .main-area {
-            flex: 1;
-            position: relative;
-            background: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* غطاء داكن للخلفية الرياضية */
-        .main-area::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 1;
-        }
-
-        /* شاشة الترحيب */
-        .welcome-screen {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .welcome-title {
-            color: #1dcf60; /* لون أخضر فاقع مطابق للتصميم */
-            font-size: 70px;
-            font-weight: 900;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(29, 207, 96, 0.3);
-        }
-
-        .welcome-subtitle {
-            color: #ccc;
-            font-size: 18px;
-            margin-top: 15px;
-        }
-
-        /* حاوية مشغل الفيديو */
-        #player-wrapper {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            display: none;
-            background: #000;
-        }
-
-        #player {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* إخفاء الأيقونات الافتراضية غير المرغوب فيها في JW Player */
-        .jw-icon-playlist, .jw-icon-next, .jw-related-btn { display: none !important; }
     </style>
 </head>
 <body>
 
     <div class="layout">
-        <!-- منطقة العرض الرئيسية -->
+        <!-- منطقة العرض الرئيسية (اليمين) -->
         <div class="main-area">
             <div class="welcome-screen" id="welcome-screen">
-                <h1 class="welcome-title">SPORTS LIVE</h1>
-                <p class="welcome-subtitle">اختر قناة من القائمة لبدء البث المباشر</p>
+                <h1 class="welcome-title">Arabic Sports Live</h1>
+                <p class="welcome-subtitle">اختر قناة من القائمة الجانبية لبدء البث المباشر ⚽</p>
             </div>
             
             <div id="player-wrapper">
@@ -225,24 +217,25 @@
             </div>
         </div>
 
-        <!-- القائمة الجانبية (Sidebar) -->
+        <!-- القائمة الجانبية (الشمال) -->
         <div class="sidebar">
             <div class="search-container">
+                <input type="text" id="search-input" class="search-box" placeholder="ابحث عن قناة..." onkeyup="filterChannels()">
+                <!-- زر الهوم على الشمال -->
                 <button class="home-btn" onclick="goHome()" title="الرئيسية">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
                 </button>
-                <input type="text" id="search-input" class="search-box" placeholder="ابحث عن قناة هنا..." onkeyup="filterChannels()">
             </div>
             <div class="channels-list-container" id="sidebar-list">
-                <!-- سيتم حقن القنوات هنا عبر الجافاسكريبت -->
+                <!-- سيتم حقن القنوات هنا -->
             </div>
         </div>
     </div>
 
     <script>
-        // هيكلة القنوات في مجموعات (Categories) لتطابق التصميم
+        // بيانات القنوات
         const channelGroups = [
             {
                 groupName: "القنوات المصرية",
@@ -280,46 +273,28 @@
             }
         ];
 
-        // استخراج قائمة خطية للمشغل وبناء واجهة المستخدم
-        let flatPlaylist = [];
-        let globalIndex = 0;
-        
+        let playerInstance = null;
+
+        // دالة بناء القائمة الجانبية
         function buildSidebar(filterText = "") {
             const sidebarContainer = document.getElementById('sidebar-list');
             sidebarContainer.innerHTML = "";
-            flatPlaylist = [];
-            globalIndex = 0;
 
-            channelGroups.forEach(group => {
-                // تصفية القنوات بناءً على البحث
+            channelGroups.forEach((group) => {
                 const filteredChannels = group.channels.filter(ch => 
                     ch.title.toLowerCase().includes(filterText.toLowerCase())
                 );
 
                 if (filteredChannels.length > 0) {
-                    // إضافة عنوان القسم
                     const header = document.createElement('div');
                     header.className = 'category-header';
                     header.innerText = group.groupName;
                     sidebarContainer.appendChild(header);
 
-                    // إضافة قنوات القسم
-                    filteredChannels.forEach(ch => {
-                        const currentIndex = globalIndex; // حفظ الاندكس الحالي
-                        
-                        // تجهيز الكائن الخاص بالمشغل
-                        const playerItem = {
-                            title: ch.title,
-                            file: ch.file,
-                            type: ch.type.toLowerCase()
-                        };
-                        if (ch.drm) playerItem.drm = ch.drm;
-                        flatPlaylist.push(playerItem);
-
-                        // بناء زر القناة في القائمة
+                    filteredChannels.forEach((ch) => {
                         const channelItem = document.createElement('div');
                         channelItem.className = 'channel-item';
-                        channelItem.onclick = () => playChannel(currentIndex, channelItem);
+                        channelItem.onclick = () => playChannel(ch, channelItem);
                         
                         channelItem.innerHTML = `
                             <span class="channel-name">${ch.title}</span>
@@ -327,30 +302,14 @@
                         `;
                         
                         sidebarContainer.appendChild(channelItem);
-                        globalIndex++;
                     });
                 }
             });
-
-            // تحديث قائمة البلاير إذا تم فلترة القنوات
-            if (playerInstance && flatPlaylist.length > 0) {
-                playerInstance.load(flatPlaylist);
-            }
         }
 
-        // إعداد JW Player
-        const playerInstance = jwplayer("player").setup({
-            playlist: [], // سيتم تحميلها لاحقاً
-            width: "100%",
-            height: "100%",
-            autostart: true,
-            stretching: "exactfit",
-            cast: {}
-        });
-
-        // دالة تشغيل القناة
-        function playChannel(index, element) {
-            // إظهار المشغل وإخفاء شاشة الترحيب
+        // دالة التشغيل التي تم تعديلها لتجنب أخطاء قائمة التشغيل (Error 102630 Fix)
+        function playChannel(channelConfig, element) {
+            // إظهار المشغل وإخفاء الخلفية
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('player-wrapper').style.display = 'block';
 
@@ -358,17 +317,41 @@
             document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
 
-            // تشغيل القناة
-            playerInstance.playlistItem(index);
+            // إعداد مصدر الفيديو
+            const sourceItem = {
+                file: channelConfig.file,
+                type: channelConfig.type.toLowerCase()
+            };
+            
+            // إضافة مفاتيح الـ DRM إن وجدت
+            if(channelConfig.drm) {
+                sourceItem.drm = channelConfig.drm;
+            }
+
+            // تشغيل المشغل
+            if (!playerInstance) {
+                playerInstance = jwplayer("player").setup({
+                    playlist: [sourceItem],
+                    width: "100%",
+                    height: "100%",
+                    autostart: true,
+                    stretching: "exactfit",
+                    cast: {}
+                });
+            } else {
+                playerInstance.load([sourceItem]);
+                playerInstance.play();
+            }
         }
 
-        // دالة العودة للرئيسية
+        // العودة للرئيسية وإغلاق البث
         function goHome() {
-            playerInstance.stop();
+            if(playerInstance) {
+                playerInstance.stop();
+            }
             document.getElementById('player-wrapper').style.display = 'none';
             document.getElementById('welcome-screen').style.display = 'block';
             
-            // إعادة ضبط البحث
             document.getElementById('search-input').value = "";
             buildSidebar();
         }
