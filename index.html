@@ -2,14 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>StarzPlay - Live Player</title>
+    <title>Arabic Sports Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="icon" href="https://starzplay.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://starzplay.com/favicon.ico">
-    
     <style>
-        /* إخفاء شريط التمرير السفلي تماماً وضبط الأبعاد */
+        /* إعدادات الصفحة الأساسية */
         html, body { 
             margin: 0; 
             padding: 0; 
@@ -17,7 +14,9 @@
             height: 100%; 
             background: #000; 
             overflow: hidden; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
         #player { 
             width: 100%; 
             height: 100%; 
@@ -26,237 +25,231 @@
             right: 0;
             bottom: 0;
             left: 0;
+            z-index: 1;
+        }
+
+        /* --------------------------------------------------- */
+        /* تصميم الشاشة الرئيسية (Home Screen) */
+        /* --------------------------------------------------- */
+        #home-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #111;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* الشريط العلوي */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #1a1a1a;
+            border-bottom: 2px solid #1dcf60;
+        }
+
+        /* عنوان الموقع المميز */
+        .main-title {
+            background: #1dcf60;
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        /* أدوات البحث وزر الهوم على اليسار */
+        .left-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #2b2b2b;
+            color: #fff;
+            outline: none;
+            width: 250px;
+            font-family: inherit;
+        }
+        .search-box:focus {
+            border-color: #1dcf60;
+        }
+
+        .home-btn {
+            padding: 10px 20px;
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .home-btn:hover {
+            background: #ff1a1a;
+        }
+
+        /* شبكة القنوات */
+        .channels-container {
+            padding: 25px;
+            overflow-y: auto;
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            align-content: start;
+        }
+
+        .channel-card {
+            background: #2b2b2b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .channel-card:hover {
+            background: #3a3a3a;
+            border-color: #1dcf60;
+            transform: translateY(-3px);
         }
 
         /* --------------------------------------------------- */
         /* التعديلات البصرية لأيقونات المشغل */
         /* --------------------------------------------------- */
-        
-        /* إخفاء أيقونة الشاشة الكاملة القديمة الافتراضية */
         .jw-icon-fullscreen svg { display: none !important; }
-
-        /* أيقونة الشاشة الكاملة الجديدة */
-        .jw-icon-fullscreen {
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzSDVhMiAyIDAgMCAwLTIgMnYzbTE4IDBWNWEyIDIgMCAwIDAtMi0yaC0zbTAgMThoM2EyIDIgMCAwIDAgMi0ydi0zTTMgMTZ2M2EyIDIgMCAwIDAgMiAyaDMiLz48L3N2Zz4=');
-            background-size: 55%;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        /* أيقونة الخروج من الشاشة الكاملة */
-        .jw-flag-fullscreen .jw-icon-fullscreen {
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzdjNhMiAyIDAgMCAxLTIgMkgzbTE4IDBoLTNhMiAyIDAgMCAxLTUtMlYzbTAgMTh2LTNhMiAyIDAgMCAxIDItMmgzTTMgMTZoM2EyIDIgMCAwIDEgMiAydjMiLz48L3N2Zz4=');
-        }
-
-        /* إخفاء أيقونة "فيديوهات أكثر" (Playlist) والتالي الخاصة بـ JW Player */
-        .jw-icon-playlist, .jw-icon-next, .jw-related-btn { 
-            display: none !important; 
-        }
-
-        /* --------------------------------------------------- */
-        /* تصميم القائمة العائمة (Overlay) للقنوات */
-        /* --------------------------------------------------- */
-        .channel-menu {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid #444;
-            border-radius: 12px;
-            padding: 20px;
-            z-index: 99999;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 260px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        }
-        .channel-menu.active {
-            display: flex;
-            animation: popIn 0.2s ease-out;
-        }
-        @keyframes popIn {
-            0% { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-        .channel-menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-            padding-bottom: 12px;
-            margin-bottom: 10px;
-        }
-        .channel-menu-header h3 {
-            margin: 0;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 16px;
-        }
-        .close-btn {
-            cursor: pointer;
-            color: #ff4d4d;
-            font-size: 26px;
-            line-height: 1;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .close-btn:hover {
-            color: #ff1a1a;
-            transform: scale(1.1);
-        }
-        .channel-menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            background: #2b2b2b;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 15px;
-            font-weight: bold;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-        .channel-menu-item:hover {
-            background: #3a3a3a;
-        }
-        .channel-menu-item.active-item {
-            background: #1dcf60;
-            border-color: #1dcf60;
-            color: #000;
-        }
-        .channel-menu-item img {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
-            background: #fff;
-            padding: 2px;
-            object-fit: contain;
-        }
+        .jw-icon-fullscreen { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzSDVhMiAyIDAgMCAwLTIgMnYzbTE4IDBWNWEyIDIgMCAwIDAtMi0yaC0zbTAgMThoM2EyIDIgMCAwIDAgMi0ydi0zTTMgMTZ2M2EyIDIgMCAwIDAgMiAyaDMiLz48L3N2Zz4='); background-size: 55%; background-position: center; background-repeat: no-repeat; }
+        .jw-flag-fullscreen .jw-icon-fullscreen { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCAzdjNhMiAyIDAgMCAxLTIgMkgzbTE4IDBoLTNhMiAyIDAgMCAxLTUtMlYzbTAgMTh2LTNhMiAyIDAgMCAxIDItMmgzTTMgMTZoM2EyIDIgMCAwIDEgMiAydjMiLz48L3N2Zz4='); }
+        .jw-icon-playlist, .jw-icon-next, .jw-related-btn { display: none !important; }
     </style>
     
     <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
 </head>
 <body>
 
+    <!-- الشاشة الرئيسية -->
+    <div id="home-screen">
+        <div class="top-bar">
+            <div class="main-title">Arabic Sports Live</div>
+            <div class="left-controls">
+                <input type="text" id="search" class="search-box" placeholder="ابحث عن قناة..." onkeyup="filterChannels()">
+                <button class="home-btn" onclick="goHome()">الرئيسية 🏠</button>
+            </div>
+        </div>
+        <div class="channels-container" id="channels-list">
+            <!-- سيتم إضافة القنوات هنا برمجياً -->
+        </div>
+    </div>
+
+    <!-- مشغل الفيديو -->
     <div id="player"></div>
 
     <script>
-        // إعداد البلاير ليكون بنظام Playlist ويحتوي على القنوات مع الشفرات
+        // مصفوفة القنوات بالترتيب المطلوب: مصرية -> StarzPlay -> الكأس
+        const channelsData = [
+            // القنوات المصرية
+            { title: "On Sport HD", file: "https://fastly.live.brightcove.com/6386028928112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjg5MjgxMTIifQ.7pBZHXb93BJ47HBrEiPQvSquoHi92NStYSX3JKYcznQ/chunklist.m3u8", type: "hls" },
+            { title: "On Sport Max", file: "https://fastly.live.brightcove.com/6386027187112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjcxODcxMTIifQ.o9bQYbACQ386kDSKbOPBVYlIhCz3WFgEHI3A8Pcw3qg/chunklist.m3u8", type: "hls" },
+            { title: "On Sport Plus", file: "https://fastly.live.brightcove.com/6384149663112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODQxNDk2NjMxMTIifQ.0yJpNEV0ZSId11mURgeaOhXZvov07Uj-VI_0qt0LLSQ/chunklist.m3u8", type: "hls" },
+            { title: "Kora Plus", file: "https://fastly.live.brightcove.com/6386030131112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMzAxMzExMTIifQ.aZa3dfTqySgbsPGs64c0_JTfvR1mKUmvdlDJ1WTeDgo/chunklist.m3u8", type: "hls" },
+            { title: "Kora Plus 2", file: "https://fastly.live.brightcove.com/6403055025112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjY0MDMwNTUwMjUxMTIifQ.Csg7lrJRiTyrEmve4yHdrm4fs715JRMK6TTz7YvCg1c/playlist-hls.m3u8", type: "hls" },
+            { title: "Kora Plus 3", file: "https://fastly.live.brightcove.com/6386122937112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYxMjI5MzcxMTIifQ.HPPHHVyUxLnEyCqaO6AP7j1iCOBrMGE-zTe-7mV1-24/chunklist.m3u8", type: "hls" },
+            
+            // قنوات StarzPlay
+            { title: "StarzPlay 1", file: "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd", type: "dash", drm: { clearkey: { keyId: "b253c726c24c7c94a3ddf9b1907e2c76", key: "097963d6ad73c3d712a104981de0ed42" } } },
+            { title: "StarzPlay 2", file: "https://sps2.starzplayarabia.com/out/v1/15e7d1ffb99746dda03f71dbbbc3c08b/index.mpd", type: "dash", drm: { clearkey: { keyId: "ee861edcd99093153a763a94b14c2c5a", key: "ab3991f6a7729ba1ea4bcdba0c1ae6c0" } } },
+            { title: "StarzPlay 3", file: "https://sps3.starzplayarabia.com/out/v1/95528122fa434bcd948c9ed2e7afabee/index.mpd", type: "dash", drm: { clearkey: { keyId: "117c29396ec6fd295880013241a466e1", key: "3dfb883251884e66d784111877c44b13" } } },
+            { title: "Abu Dhabi Sports 1", file: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_1/abudhabi_sports_1_dash_enc/index.mpd", type: "dash", drm: { clearkey: { keyId: "e78769d87a41e15036a4fb8bfdf1371e", key: "37be0375dc9fe544c3c6de6a105f7c0a" } } },
+            { title: "Abu Dhabi Sports 2", file: "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_2/abudhabi_sports_2_dash_enc/index.mpd", type: "dash", drm: { clearkey: { keyId: "386a5e1166d9102709888c3468ce1f56", key: "73bd0bd25a148b3a80116ecdd085ead6" } } },
+            
+            // قنوات الكأس
+            { title: "Alkass 1", file: "https://storage.googleapis.com/livealkass-eu/alkass1-p/main.m3u8", type: "hls" },
+            { title: "Alkass 2", file: "https://storage.googleapis.com/livealkass-eu/alkass2-p/main.m3u8", type: "hls" },
+            { title: "Alkass 3", file: "https://storage.googleapis.com/livealkass-eu/alkass3-p/main.m3u8", type: "hls" },
+            { title: "Alkass 4", file: "https://storage.googleapis.com/livealkass-eu/alkass4-p/main.m3u8", type: "hls" },
+            { title: "Alkass 5", file: "https://storage.googleapis.com/livealkass-eu/alkass5-p/main.m3u8", type: "hls" },
+            { title: "Alkass 6", file: "https://storage.googleapis.com/livealkass-eu/alkass6-p/main.m3u8", type: "hls" },
+            { title: "Alkass 7", file: "https://storage.googleapis.com/livealkass-eu/alkass7-p/main.m3u8", type: "hls" },
+            { title: "Alkass 8", file: "https://storage.googleapis.com/livealkass-eu/alkass8-p/main.m3u8", type: "hls" }
+        ];
+
+        // إعداد البلاير
         const playerInstance = jwplayer("player").setup({
-            "playlist": [
-                {
-                    "title": "StarzPlay 1",
-                    "file": "https://sps1.starzplayarabia.com/out/v1/eee188845e9543699fd24e5a9890c6e2/index.mpd",
-                    "type": "dash",
-                    "drm": {
-                        "clearkey": {
-                            "keyId": "b253c726c24c7c94a3ddf9b1907e2c76",
-                            "key": "097963d6ad73c3d712a104981de0ed42"
-                        }
-                    }
-                },
-                {
-                    "title": "StarzPlay 2",
-                    "file": "https://sps2.starzplayarabia.com/out/v1/15e7d1ffb99746dda03f71dbbbc3c08b/index.mpd",
-                    "type": "dash",
-                    "drm": {
-                        "clearkey": {
-                            "keyId": "ee861edcd99093153a763a94b14c2c5a",
-                            "key": "ab3991f6a7729ba1ea4bcdba0c1ae6c0"
-                        }
-                    }
-                },
-                {
-                    "title": "StarzPlay 3",
-                    "file": "https://sps3.starzplayarabia.com/out/v1/95528122fa434bcd948c9ed2e7afabee/index.mpd",
-                    "type": "dash",
-                    "drm": {
-                        "clearkey": {
-                            "keyId": "117c29396ec6fd295880013241a466e1",
-                            "key": "3dfb883251884e66d784111877c44b13"
-                        }
-                    }
-                },
-                {
-                    "title": "Abu Dhabi Sports 1",
-                    "file": "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_1/abudhabi_sports_1_dash_enc/index.mpd",
-                    "type": "dash",
-                    "drm": {
-                        "clearkey": {
-                            "keyId": "e78769d87a41e15036a4fb8bfdf1371e",
-                            "key": "37be0375dc9fe544c3c6de6a105f7c0a"
-                        }
-                    }
-                },
-                {
-                    "title": "Abu Dhabi Sports 2",
-                    "file": "https://admn-live-cdn-lb.starzplayarabia.com/out/v1/admn_tv/abudhabi_sports_2/abudhabi_sports_2_dash_enc/index.mpd",
-                    "type": "dash",
-                    "drm": {
-                        "clearkey": {
-                            "keyId": "386a5e1166d9102709888c3468ce1f56",
-                            "key": "73bd0bd25a148b3a80116ecdd085ead6"
-                        }
-                    }
-                }
-            ],
-            "width": "100%",
-            "height": "100%",
-            "autostart": true,
-            "stretching": "uniform"
+            playlist: channelsData,
+            width: "100%",
+            height: "100%",
+            autostart: false, // لا تعمل تلقائياً حتى يختار المستخدم من الشاشة الرئيسية
+            stretching: "uniform"
         });
 
-        // دوال للتحكم في القائمة العائمة
-        function toggleMenu() {
-            const menu = document.getElementById('customChannelMenu');
-            if(menu) menu.classList.toggle('active');
-        }
+        // دوال الشاشة الرئيسية والبحث
+        const listContainer = document.getElementById('channels-list');
+        const homeScreen = document.getElementById('home-screen');
+        const searchInput = document.getElementById('search');
 
-        function changeChannel(index) {
-            // تجاهل الأمر لو اختار نفس القناة الشغالة حالياً
-            if(playerInstance.getPlaylistIndex() === index) {
-                toggleMenu();
-                return;
-            }
-            
-            // تحديث اللون الأخضر (Active) في القائمة
-            const items = document.querySelectorAll('.channel-menu-item');
-            items.forEach((el, i) => {
-                if(i === index) el.classList.add('active-item');
-                else el.classList.remove('active-item');
+        function renderChannels(filterText = "") {
+            listContainer.innerHTML = "";
+            channelsData.forEach((ch, index) => {
+                if (ch.title.toLowerCase().includes(filterText.toLowerCase())) {
+                    const card = document.createElement('div');
+                    card.className = 'channel-card';
+                    card.innerText = ch.title;
+                    card.onclick = () => playChannel(index);
+                    listContainer.appendChild(card);
+                }
             });
-
-            // الانتقال السلس للقناة الجديدة
-            playerInstance.playlistItem(index);
-            
-            // إغلاق القائمة العائمة
-            toggleMenu();
         }
 
-        // بناء القائمة والأزرار بمجرد تحميل المشغل
+        // رسم القنوات لأول مرة
+        renderChannels();
+
+        function filterChannels() {
+            renderChannels(searchInput.value);
+        }
+
+        // تشغيل القناة المختارة وإخفاء الشاشة الرئيسية
+        function playChannel(index) {
+            homeScreen.style.display = 'none';
+            playerInstance.playlistItem(index);
+            playerInstance.play();
+        }
+
+        // إيقاف البث والعودة للشاشة الرئيسية
+        function goHome() {
+            playerInstance.stop(); // تمنع أي بث شغال حالياً
+            homeScreen.style.display = 'flex';
+            searchInput.value = "";
+            renderChannels(); 
+        }
+
+        // إضافة أزرار مخصصة داخل شريط تحكم المشغل (Home & Stretch)
         playerInstance.on('ready', function() {
-            // 1. زر فتح قائمة القنوات (أيقونة Menu)
-            const listIcon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNCA2aDE2TTQgMTJoMTZNNCAxOGgxNiIvPjwvc3ZnPg==";
-            
+            // 1. زر الرئيسية داخل المشغل للعودة بسرعة
+            const homeIcon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTMgOWw5LTcgOSA3djExYTIgMiAwIDAgMS0yIDJINWEyIDIgMCAwIDEtMi0yeiIvPjwvc3ZnPg==";
             playerInstance.addButton(
-                listIcon,
-                "قائمة القنوات",
+                homeIcon,
+                "الرئيسية",
                 function() {
-                    toggleMenu();
+                    goHome();
                 },
-                "channels-button"
+                "home-button"
             );
 
-            // 2. زر التوسيع الأصلي
+            // 2. زر التوسيع/التضييق
             let isStretched = false;
             const diagonalCutArrow = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMTBsNy03bS02IDBoNnY2bS0xMSA1bC03IDdtNiAwSDN2LTYiLz48L3N2Zz4=";
-
             playerInstance.addButton(
                 diagonalCutArrow, 
                 "توسيع/تضييق الصورة", 
@@ -271,45 +264,6 @@
                 },
                 "stretch-button"
             );
-
-            // 3. حقن كود القائمة العائمة داخل واجهة البلاير
-            const playerContainer = playerInstance.getContainer();
-            
-            // أيقونات قنوات أبو ظبي (مبنية بـ SVG لتشبه ستايل ستارز بلاي الأسود مع ألوان حمراء)
-            const logoAds1 = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111' /%3E%3Ctext x='50' y='55' font-family='Arial, sans-serif' font-weight='900' font-size='32' fill='%23fff' text-anchor='middle' dominant-baseline='middle'%3EADS%3Ctspan fill='%23e50914'%3E1%3C/tspan%3E%3C/text%3E%3C/svg%3E";
-            const logoAds2 = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111' /%3E%3Ctext x='50' y='55' font-family='Arial, sans-serif' font-weight='900' font-size='32' fill='%23fff' text-anchor='middle' dominant-baseline='middle'%3EADS%3Ctspan fill='%23e50914'%3E2%3C/tspan%3E%3C/text%3E%3C/svg%3E";
-
-            const menuHtml = `
-                <div id="customChannelMenu" class="channel-menu" dir="rtl">
-                    <div class="channel-menu-header">
-                        <h3>باقة StarzPlay</h3>
-                        <span class="close-btn" onclick="toggleMenu()">&times;</span>
-                    </div>
-                    <div class="channel-menu-item active-item" onclick="changeChannel(0)">
-                        <img src="https://starzplay.com/favicon.ico" alt="Icon">
-                        <span>StarzPlay 1</span>
-                    </div>
-                    <div class="channel-menu-item" onclick="changeChannel(1)">
-                        <img src="https://starzplay.com/favicon.ico" alt="Icon">
-                        <span>StarzPlay 2</span>
-                    </div>
-                    <div class="channel-menu-item" onclick="changeChannel(2)">
-                        <img src="https://starzplay.com/favicon.ico" alt="Icon">
-                        <span>StarzPlay 3</span>
-                    </div>
-                    <div class="channel-menu-item" onclick="changeChannel(3)">
-                        <img src="${logoAds1}" alt="Icon">
-                        <span>AD Sports 1</span>
-                    </div>
-                    <div class="channel-menu-item" onclick="changeChannel(4)">
-                        <img src="${logoAds2}" alt="Icon">
-                        <span>AD Sports 2</span>
-                    </div>
-                </div>
-            `;
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = menuHtml;
-            playerContainer.appendChild(tempDiv.firstElementChild);
         });
     </script>
 </body>
