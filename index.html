@@ -301,11 +301,11 @@
 
         function getAutoQualityUrl(qList) {
             // الافتراضي هيكون جودة متوسطة عشان يفتح بسرعة لو المتصفح مش بيدعم قياس السرعة
-            let speed = (navigator.connection && navigator.connection.downlink) ? navigator.connection.downlink : 3;
+            let speed = (navigator.connection && navigator.connection.downlink) ? navigator.connection.downlink : 2;
             
             // رفعنا الحد الأدنى لاختيار 1080p عشان ميحملش على الفاضي ويفصل
-            if (speed >= 8) return qList[1].url; // يختار 720p لو السرعة الفعلية أعلى من 8 ميجا
-            else if (speed >= 2) return qList[2].url; // يختار 480p لو السرعة أعلى من 2 ميجا
+            if (speed >= 8) return qList[2].url; // يختار 720p لو السرعة الفعلية أعلى من 8 ميجا
+            else if (speed >= 2) return qList[3].url; // يختار 480p لو السرعة أعلى من 2 ميجا
             else return qList[3].url; // لو النت ضعيف يفتح 480p فوراً لضمان التشغيل
         }
 
