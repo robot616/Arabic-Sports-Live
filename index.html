@@ -107,6 +107,39 @@
         .jw-flag-fullscreen .jw-icon-fullscreen {
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTggM3YzYTIgMiAwIDAgMS0yIDJIM20xOCAwaC0zYTIgMiAwIDAgMS0yLTJWM20wIDE4di0zYTIgMiAwIDAgMSAyLTJoM00zIDE2aDNhMiAyIDAgMCAxIDIgMnYzIj48L3BhdGg+PC9zdmc+');
         }
+
+        /* قائمة الجودة اليدوية للقنوات التي تحتوي على qualities فقط */
+        .manual-quality-menu {
+            display: none;
+            position: absolute;
+            right: 65px;
+            bottom: 60px;
+            width: 120px;
+            background: rgba(28, 28, 28, 0.95);
+            border: 1px solid #444;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            z-index: 999999;
+            overflow: hidden;
+            direction: rtl;
+        }
+        .manual-quality-menu.active { display: flex; flex-direction: column; }
+        .manual-quality-item {
+            padding: 12px 0;
+            color: #eee;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+        .manual-quality-item:last-child { border-bottom: none; }
+        .manual-quality-item:hover { background: rgba(255,255,255,0.1); }
+        .manual-quality-item.active-item { color: #1dcf60; }
+
     </style>
 </head>
 <body>
@@ -138,6 +171,9 @@
             // القنوات المصرية
             // ==========================================
             { header: "القنوات المصرية" },
+            { name: "ON SPORTS HD (24/7)", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F53.css%3Fx%3D%2Fhls%2F%26token%3DSUhQUk1VOUh1V2ZXTFV3", qualities: [{label: "1080P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F53.css%3Fx%3D%2Fhls%2F%26token%3DSUhQUk1VOUh1V2ZXTFV3"}, {label: "720P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1415.css%3Fx%3D%2Fhls%2F%26token%3DQllabUZBYnAxemhLb05N"}, {label: "480P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1412.css%3Fx%3D%2Fhls%2F%26token%3DQllabUZBYnAxemhLb05N"}] },
+            { name: "ON SPORTS MAX (24/7)", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F56.css%3Fx%3D%2Fhls%2F%26token%3DSWdGOTFaZ3VVTTVPenZh", qualities: [{label: "1080P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F56.css%3Fx%3D%2Fhls%2F%26token%3DSWdGOTFaZ3VVTTVPenZh"}, {label: "720P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1439.css%3Fx%3D%2Fhls%2F%26token%3DNjE4dUd0YU84dXlNc3Y0"}, {label: "480P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1436.css%3Fx%3D%2Fhls%2F%26token%3DMXV0a1FGc3RXeExQbGE1"}] },
+            { name: "ON SPORTS PLUS (24/7)", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F638.css%3Fx%3D%2Fhls%2F%26token%3Dd1BGcG1IT204ZFZQT3c2", qualities: [{label: "1080P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F638.css%3Fx%3D%2Fhls%2F%26token%3Dd1BGcG1IT204ZFZQT3c2"}, {label: "720P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1445.css%3Fx%3D%2Fhls%2F%26token%3DQXdPaE5McnhuSkJxQkk5"}, {label: "480P", url: "https://live-tv-116849026166.europe-west1.run.app/api/sindbad/m3u8?url=http%3A%2F%2Fassets.pushyourcss.world%3A8080%2Fassets%2Fres2%2Fjava2%2F1442.css%3Fx%3D%2Fhls%2F%26token%3DSVdPSEN5SFhnMlpmTDFl"}] },
             { name: "On Sport HD", url: "https://fastly.live.brightcove.com/6386028928112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjg5MjgxMTIifQ.7pBZHXb93BJ47HBrEiPQvSquoHi92NStYSX3JKYcznQ/chunklist.m3u8" },
             { name: "On Sport Max", url: "https://fastly.live.brightcove.com/6386027187112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODYwMjcxODcxMTIifQ.o9bQYbACQ386kDSKbOPBVYlIhCz3WFgEHI3A8Pcw3qg/chunklist.m3u8" },
             { name: "On Sport Plus", url: "https://fastly.live.brightcove.com/6384149663112/us-east-1/6416013238001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoieWN3Ymx1LmVncmVzcy5zenkzeHgiLCJhY2NvdW50X2lkIjoiNjQxNjAxMzIzODAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2NDE2MDEzMjM4MDAxIl0sImp0aSI6IjYzODQxNDk2NjMxMTIifQ.0yJpNEV0ZSId11mURgeaOhXZvov07Uj-VI_0qt0LLSQ/chunklist.m3u8" },
@@ -293,15 +329,58 @@
             playerInstance = jwplayer("player").setup(setupConfig);
 
             playerInstance.on('ready', function() {
+                // زر الجودة اليدوي للقنوات التي تحتوي على جودات محددة فقط
+                // أُضيف قبل زر توسيع الصورة ليأتي قبله في ترتيب الأزرار المخصصة.
+                if (channel.qualities && channel.qualities.length) {
+                    var qualityIcon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xOS4xNCwxMi45NGMwLjA0LTAuMywwLjA2LTAuNjEsMC4wNi0wLjk0YzAtMC4zMi0wLjAyLTAuNjQtMC4wNi0wLjk0bDIuMDMtMS41OGMwLjE4LTAuMTQsMC4yMy0wLjQxLDAuMTItMC42MSBsLTEuOTItMy4zMmMtMC4xMi0wLjIyLTAuMzctMC4yOS0wLjU5LTAuMjJsLTIuMzksMC45NmMtMC41LTAuMzgtMS4wMy0wLjctMS42Mi0wLjk0TDE0LjQsMi44MWMtMC4wNC0wLjI0LTAuMjQtMC40MS0wLjQ4LTAuNDEgaC0zLjg0Yy0wLjI0LDAtMC40MywwLjE3LTAuNDcsMC40MUw5LjI1LDUuMzVDOC42Niw1LjU5LDguMTIsNS45Miw3LjYzLDYuMjlMNS4yNCw1LjMzYy0wLjIyLTAuMDgtMC40NywwLTAuNTksMC4yMkwyLjczLDguODcgQzIuNjIsOS4wOCwyLjY2LDkuMzQsMi44Niw5LjQ4bDIuMDMsMS41OEM0Ljg0LDExLjM2LDQuOCwxMS42OSw0LjgsMTJzMC4wMiwwLjY0LDAuMDYsMC45NGwtMi4wMywxLjU4IGMtMC4xOCwwLjE0LTAuMjMsMC40MS0wLjEyLDAuNjFsMS45MiwzLjMyYzAuMTIsMC4yMiwwLjM3LDAuMjksMC41OSwwLjIyTDkuNiwxNy42OWMwLjUsMC4zOCwxLjAzLDAuNywxLjYyLDAuOTRsMC4zNiwyLjU0IGMwLjA1LDAuMjQsMC4yNCwwLjQxLDAuNDgsMC40MWgzLjg0YzAuMjQsMCwwLjQ0LTAuMTcsMC40Ny0wLjQxbDAuMzYtMi41NGMwLjU5LTAuMjQsMS4xMy0wLjU2LDEuNjItMC45NGwyLjM5LDAuOTYgYzAuMjIsMC4wOCwwLjQ3LDAsMC41OS0wLjIybDEuOTItMy4zMmMwLjEyLTAuMjIsMC4wNy0wLjQ5LTAuMTItMC42MUwxOS4xNCwxMi45NHogTTEyLDE1LjZjLTEuOTgsMC0zLjYtMS42Mi0zLjYtMy42IHMxLjYyLTMuNiwzLjYtMy42czMuNiwxLjYyLDMuNiwzLjZTMTMuOTgsMTUuNiwxMiwxNS42eiIvPjwvc3ZnPg==";
+                    playerInstance.addButton(qualityIcon, "جودة البث", function() {
+                        var menu = document.querySelector(".manual-quality-menu");
+                        if (!menu) {
+                            menu = document.createElement("div");
+                            menu.className = "manual-quality-menu";
+                            var playerRoot = document.querySelector("#player .jw-wrapper") || document.querySelector("#player .jwplayer") || document.querySelector("#player");
+                            playerRoot.appendChild(menu);
+                        }
+                        menu.innerHTML = "";
+
+                        // تلقائي خيار مستقل يختار الجودة وفق سرعة الاتصال، دون تغيير الخيارات اليدوية.
+                        var choices = [{ label: "تلقائي (Auto)", isAuto: true }].concat(channel.qualities);
+                        choices.forEach(function(q, qIndex) {
+                            var item = document.createElement("div");
+                            item.className = "manual-quality-item" + ((playerInstance.__manualQualityIndex || 0) === qIndex ? " active-item" : "");
+                            item.textContent = q.label;
+                            item.onclick = function() {
+                                var selectedUrl = q.url;
+                                if (q.isAuto) {
+                                    var speed = (navigator.connection && typeof navigator.connection.downlink === "number")
+                                        ? navigator.connection.downlink : 5;
+                                    var targetLabel = speed >= 5 ? "1080P" : (speed >= 2 ? "720P" : "480P");
+                                    var target = channel.qualities.find(function(option) { return option.label === targetLabel; }) || channel.qualities[channel.qualities.length - 1];
+                                    selectedUrl = target.url;
+                                }
+                                var pos = playerInstance.getPosition();
+                                playerInstance.__manualQualityIndex = qIndex;
+                                playerInstance.load([{ file: selectedUrl, type: "hls", title: channel.name }]);
+                                playerInstance.once("play", function() {
+                                    if (pos > 0) playerInstance.seek(pos);
+                                });
+                                playerInstance.play();
+                                menu.classList.remove("active");
+                            };
+                            menu.appendChild(item);
+                        });
+                        menu.classList.toggle("active");
+                    }, "manual-quality-button");
+                }
+
                 var isStretched = false;
                 var diagonalCutArrow = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMTBsNy03bS02IDBoNnY2bS0xMSA1bC03IDdtNiAwSDN2LTYiLz48L3N2Zz4=";
-
                 playerInstance.addButton(
-                    diagonalCutArrow, 
-                    "توسيع/تضييق الصورة", 
+                    diagonalCutArrow,
+                    "توسيع/تضييق الصورة",
                     function() {
                         if (!isStretched) {
-                            playerInstance.setConfig({ stretching: "exactfit" }); 
+                            playerInstance.setConfig({ stretching: "exactfit" });
                             isStretched = true;
                         } else {
                             playerInstance.setConfig({ stretching: "uniform" });
